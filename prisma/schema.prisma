@@ -1,0 +1,23 @@
+// prisma/schema.prisma
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Eén record per gegenereerde QR code
+model QrCode {
+  id        String   @id @default(cuid())
+  type      String   // link, text, wifi, phone, email, vcard
+  label     String   // korte herkenbare naam (bv. "WiFi gasten" of de URL zelf)
+  data      String   // de ruwe data die in de QR code staat
+  dotColor  String   @default("#6366f1")
+  bgColor   String   @default("#ffffff")
+  dotStyle  String   @default("rounded")
+  createdAt DateTime @default(now())
+}

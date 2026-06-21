@@ -1,0 +1,159 @@
+'use client'
+
+import { useLocale } from '@/lib/i18n'
+
+function Field({ label, ...props }) {
+  return (
+    <div className="mb-4 last:mb-0">
+      <label className="block text-xs font-semibold text-zinc-400 mb-1.5 uppercase tracking-wider">
+        {label}
+      </label>
+      <input
+        {...props}
+        className="w-full bg-zinc-800/60 border border-zinc-700/50 rounded-xl px-3.5 py-2.5
+                   text-zinc-100 text-sm placeholder:text-zinc-600
+                   focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/50
+                   hover:border-zinc-600/60 transition-all duration-150"
+      />
+    </div>
+  )
+}
+
+function SelectField({ label, value, onChange, children }) {
+  return (
+    <div className="mb-4 last:mb-0">
+      <label className="block text-xs font-semibold text-zinc-400 mb-1.5 uppercase tracking-wider">
+        {label}
+      </label>
+      <select
+        value={value}
+        onChange={onChange}
+        className="w-full bg-zinc-800/60 border border-zinc-700/50 rounded-xl px-3.5 py-2.5
+                   text-zinc-100 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/50
+                   hover:border-zinc-600/60 transition-all duration-150"
+      >
+        {children}
+      </select>
+    </div>
+  )
+}
+
+export default function DynamicFields({ type, fields, setFields }) {
+  const { t } = useLocale()
+  const update = (key) => (e) => setFields((prev) => ({ ...prev, [key]: e.target.value }))
+
+  switch (type) {
+    case 'link':
+      return (
+        <Field
+          label={t.url}
+          type="url"
+          inputMode="url"
+          placeholder={t.urlPlaceholder}
+          value={fields.url || ''}
+          onChange={update('url')}
+        />
+      )
+
+    case 'text':
+      return (
+        <div className="mb-0">
+          <label className="block text-xs font-semibold text-zinc-400 mb-1.5 uppercase tracking-wider">
+            {t.textLabel}
+          </label>
+          <textarea
+            rows={5}
+            placeholder={t.textPlaceholder}
+            value={fields.text || ''}
+            onChange={update('text')}
+            className="w-full bg-zinc-800/60 border border-zinc-700/50 rounded-xl px-3.5 py-2.5
+                       text-zinc-100 text-sm placeholder:text-zinc-600 resize-none
+                       focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/50
+                       hover:border-zinc-600/60 transition-all duration-150"
+          />
+        </div>
+      )
+
+    case 'wifi':
+      return (
+        <>
+          <Field
+            label={t.networkName}
+            value={fields.ssid || ''}
+            onChange={update('ssid')}
+          />
+          <Field
+            label={t.password}
+            value={fields.password || ''}
+            onChange={update('password')}
+          />
+          <SelectField
+            label={t.encryption}
+            value={fields.encryption || 'WPA'}
+            onChange={update('encryption')}
+          >
+            <option value="WPA">WPA / WPA2</option>
+            <option value="WEP">WEP</option>
+            <option value="nopass">{t.noPassword}</option>
+          </SelectField>
+        </>
+      )
+
+    case 'phone':
+      return (
+        <Field
+          label={t.phoneNumber}
+          type="tel"
+          inputMode="tel"
+          placeholder={t.phonePlaceholder}
+          value={fields.phone || ''}
+          onChange={update('phone')}
+        />
+      )
+
+    case 'email':
+      return (
+        <>
+          <Field
+            label={t.emailAddress}
+            type="email"
+            inputMode="email"
+            value={fields.email || ''}
+            onChange={update('email')}
+          />
+          <Field
+            label={t.emailSubject}
+            value={fields.subject || ''}
+            onChange={update('subject')}
+          />
+        </>
+      )
+
+    case 'vcard':
+      return (
+        <>
+          <Field label={t.fullName} value={fields.name || ''} onChange={update('name')} />
+          <Field
+            label={t.phoneNumber}
+            type="tel"
+            inputMode="tel"
+            value={fields.phone || ''}
+            onChange={update('phone')}
+          />
+          <Field
+            label={t.emailAddress}
+            type="email"
+            inputMode="email"
+            value={fields.email || ''}
+            onChange={update('email')}
+          />
+          <Field label={t.company} value={fields.organization || ''} onChange={update('organization')} />
+          <Field label={t.jobTitle} value={fields.title || ''} onChange={update('title')} />
+        </>
+      )
+
+    default:
+      return null
+  }
+}

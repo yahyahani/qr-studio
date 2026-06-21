@@ -1,0 +1,16 @@
+services:
+  qr-generator:
+    build: .
+    container_name: qr-generator
+    ports:
+      - "3000:3000"
+    environment:
+      # SQLite-bestand staat op het volume hieronder, dus blijft bewaard
+      # na een herstart van de container.
+      - DATABASE_URL=file:/app/data/dev.db
+    volumes:
+      - qr-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  qr-data:
