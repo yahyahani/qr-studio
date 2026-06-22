@@ -10,7 +10,7 @@ import { useLocale } from '@/lib/i18n'
 
 export default function Home() {
   const { t } = useLocale()
-  const [type, setType] = useState('link')
+  const [type,   setType]   = useState('link')
   const [fields, setFields] = useState({})
 
   const handleTypeChange = (newType) => {
@@ -21,12 +21,12 @@ export default function Home() {
   const qrData = useMemo(() => buildQrData(type, fields), [type, fields])
 
   const qrLabel = useMemo(() => {
-    if (fields.url) return fields.url
-    if (fields.ssid) return `WiFi: ${fields.ssid}`
-    if (fields.name) return fields.name
+    if (fields.url)   return fields.url
+    if (fields.ssid)  return `WiFi: ${fields.ssid}`
+    if (fields.name)  return fields.name
     if (fields.phone) return fields.phone
     if (fields.email) return fields.email
-    if (fields.text) return fields.text.slice(0, 50)
+    if (fields.text)  return fields.text.slice(0, 50)
     return ''
   }, [fields])
 
@@ -37,7 +37,7 @@ export default function Home() {
         <div className="max-w-5xl mx-auto">
 
           <div className="mb-7">
-            <h1 className="text-2xl font-bold text-zinc-50 mb-1 tracking-tight">
+            <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50 mb-1 tracking-tight">
               {t.appName}
             </h1>
             <p className="text-zinc-500 text-sm">{t.appTagline}</p>
@@ -48,7 +48,7 @@ export default function Home() {
             {/* Left: form */}
             <div className="w-full min-w-0 animate-fade-in">
               <ContentTypeSelector activeType={type} onChange={handleTypeChange} />
-              <div className="bg-zinc-900 border border-zinc-800/70 rounded-2xl p-5 shadow-sm">
+              <div className="glass-card p-5">
                 <DynamicFields type={type} fields={fields} setFields={setFields} />
               </div>
             </div>

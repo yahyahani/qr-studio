@@ -8,7 +8,10 @@ import { useLocale } from '@/lib/i18n'
 
 function Spinner() {
   return (
-    <div className="w-4 h-4 rounded-full border-2 border-zinc-700 border-t-indigo-400 animate-spin shrink-0" />
+    <div className="w-4 h-4 rounded-full border-2
+                    border-zinc-200 dark:border-zinc-700
+                    border-t-indigo-500 dark:border-t-indigo-400
+                    animate-spin shrink-0" />
   )
 }
 
@@ -16,11 +19,9 @@ export default function HistoryPage() {
   const { t, locale } = useLocale()
   const [qrcodes, setQrcodes] = useState([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [error,   setError]   = useState(null)
 
-  useEffect(() => {
-    loadHistory()
-  }, [])
+  useEffect(() => { loadHistory() }, [])
 
   async function loadHistory() {
     setLoading(true)
@@ -49,11 +50,8 @@ export default function HistoryPage() {
   const formatDate = (dateStr) => {
     const localeMap = { ar: 'ar-EG', nl: 'nl-NL', en: 'en-GB' }
     return new Date(dateStr).toLocaleDateString(localeMap[locale] ?? 'en-GB', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+      day: 'numeric', month: 'short', year: 'numeric',
+      hour: '2-digit', minute: '2-digit',
     })
   }
 
@@ -64,7 +62,7 @@ export default function HistoryPage() {
         <div className="max-w-5xl mx-auto">
 
           <div className="mb-7">
-            <h1 className="text-2xl font-bold text-zinc-50 mb-1 tracking-tight">
+            <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50 mb-1 tracking-tight">
               {t.historyTitle}
             </h1>
             <p className="text-zinc-500 text-sm">{t.historySubtitle}</p>
@@ -78,7 +76,10 @@ export default function HistoryPage() {
           )}
 
           {error && (
-            <div className="flex items-start gap-3 text-red-400 bg-red-950/20 border border-red-900/40 rounded-xl px-4 py-3 text-sm">
+            <div className="flex items-start gap-3 text-red-600 dark:text-red-400
+                            bg-red-50 dark:bg-red-950/20
+                            border border-red-200 dark:border-red-900/40
+                            rounded-xl px-4 py-3 text-sm">
               <span className="mt-0.5">⚠</span>
               {error}
             </div>
@@ -86,10 +87,13 @@ export default function HistoryPage() {
 
           {!loading && !error && qrcodes.length === 0 && (
             <div className="text-center py-20 animate-fade-in">
-              <p className="text-zinc-600 mb-4 text-sm">{t.emptyHistory}</p>
+              <p className="text-zinc-500 dark:text-zinc-600 mb-4 text-sm">{t.emptyHistory}</p>
               <Link
                 href="/"
-                className="inline-flex items-center gap-1.5 text-indigo-400 hover:text-indigo-300 text-sm font-medium transition-colors duration-150"
+                className="inline-flex items-center gap-1.5
+                           text-indigo-600 dark:text-indigo-400
+                           hover:text-indigo-700 dark:hover:text-indigo-300
+                           text-sm font-medium transition-colors duration-150"
               >
                 {t.createFirst}
                 <span aria-hidden="true">→</span>
@@ -102,10 +106,14 @@ export default function HistoryPage() {
               {qrcodes.map((qr) => (
                 <article
                   key={qr.id}
-                  className="group bg-zinc-900 border border-zinc-800/70 rounded-2xl p-4 flex gap-3.5
-                             hover:border-zinc-700 transition-colors duration-150"
+                  className="group glass-card p-4 flex gap-3.5
+                             hover:border-indigo-300/40 dark:hover:border-indigo-500/30
+                             hover:-translate-y-0.5 hover:shadow-glow-indigo-sm
+                             transition-all duration-200"
                 >
-                  <div className="bg-white rounded-xl p-1.5 shrink-0 shadow-sm">
+                  {/* QR thumbnail — always white bg for scannability */}
+                  <div className="bg-white rounded-xl p-1.5 shrink-0
+                                  shadow-sm ring-1 ring-black/5">
                     <QrThumbnail
                       data={qr.data}
                       dotColor={qr.dotColor}
@@ -114,22 +122,28 @@ export default function HistoryPage() {
                       size={72}
                     />
                   </div>
+
                   <div className="flex-1 min-w-0">
-                    <span className="inline-block text-xs px-2 py-0.5 rounded-md bg-zinc-800 text-zinc-300 mb-1.5 font-medium">
+                    <span className="inline-block text-xs px-2 py-0.5 rounded-md mb-1.5 font-medium
+                                     bg-indigo-50 dark:bg-zinc-800
+                                     text-indigo-700 dark:text-zinc-300
+                                     ring-1 ring-indigo-100 dark:ring-transparent">
                       {t.types[qr.type] || qr.type}
                     </span>
                     <p
-                      className="text-sm text-zinc-200 truncate leading-snug mb-1"
+                      className="text-sm text-zinc-800 dark:text-zinc-200 truncate leading-snug mb-1"
                       title={qr.label}
                     >
                       {qr.label}
                     </p>
-                    <p className="text-xs text-zinc-500 mb-3">
+                    <p className="text-xs text-zinc-400 dark:text-zinc-500 mb-3">
                       {formatDate(qr.createdAt)}
                     </p>
                     <button
                       onClick={() => handleDelete(qr.id)}
-                      className="text-xs text-zinc-500 hover:text-red-400 transition-colors duration-150 font-medium"
+                      className="text-xs text-zinc-400 dark:text-zinc-500
+                                 hover:text-red-600 dark:hover:text-red-400
+                                 transition-colors duration-150 font-medium"
                     >
                       {t.deleteBtn}
                     </button>

@@ -12,7 +12,10 @@ export default function LanguageSwitcher() {
   const { locale, setLocale } = useLocale()
 
   return (
-    <div className="flex items-center gap-0.5 bg-zinc-800/70 rounded-lg p-1">
+    <div className="flex items-center gap-0.5
+                    bg-white/80 dark:bg-zinc-800/70
+                    border border-indigo-100/60 dark:border-transparent
+                    rounded-lg p-1">
       {LANGS.map((lang) => (
         <button
           key={lang.code}
@@ -20,8 +23,8 @@ export default function LanguageSwitcher() {
           aria-label={lang.code.toUpperCase()}
           className={`px-2.5 py-1 rounded-md text-xs font-semibold tracking-wide transition-all duration-150
             ${locale === lang.code
-              ? 'bg-zinc-600 text-white shadow-sm'
-              : 'text-zinc-400 hover:text-zinc-200'
+              ? 'bg-indigo-50 dark:bg-zinc-600 text-indigo-700 dark:text-white shadow-sm ring-1 ring-indigo-200/60 dark:ring-transparent'
+              : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200'
             }`}
         >
           {lang.label}
