@@ -3,7 +3,7 @@ services:
     build: .
     container_name: qr-generator
     ports:
-      - "3000:3000"
+      - "3002:3000"
     environment:
       # SQLite-bestand staat op het volume hieronder, dus blijft bewaard
       # na een herstart van de container.
